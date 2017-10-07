@@ -1,5 +1,79 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto");
 body {
-  background-color: #EEE;
+  font-family: 'Roboto';
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+  font-size: 15px; }
+
+.jumbo {
+  background: linear-gradient(45deg, #ab47bc, #7e57c2, #ec407a);
+  background-size: 600% 600%;
+  animation: gradientAnimation 20s ease infinite;
+  width: 100%;
   text-align: center;
-  color: rgba(0, 0, 0, 0.5);
-  font-family: 'Helvetica'; }
+  padding: 2rem 0;
+  display: block;
+  margin-bottom: 2rem; }
+
+.jumbo h1 {
+  font-weight: 200;
+  font-size: 38px;
+  letter-spacing: 0.5px;
+  margin: .5rem 0;
+  color: rgba(255, 255, 255, 0.9); }
+
+.jumbo a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s; }
+  .jumbo a:after {
+    content: '|';
+    margin: 0 10px;
+    color: rgba(255, 255, 255, 0.2); }
+  .jumbo a:last-child:after {
+    content: '';
+    margin: 0; }
+  .jumbo a:hover {
+    color: #FFF; }
+
+.container {
+  margin: auto;
+  box-sizing: border-box;
+  max-width: 640px;
+  border-radius: 3px;
+  padding: 0 1.5rem; }
+
+.logo {
+  width: 50px;
+  opacity: 0.4; }
+
+pre {
+  background: #ECEFF1;
+  border: 1px solid #dde3e6;
+  padding: 1rem;
+  color: #263238;
+  box-sizing: border-box;
+  border-radius: 3px; }
+
+code {
+  display: inline-block;
+  font-family: 'Roboto';
+  background: #fdedf2;
+  border: 1px solid #fbdfe9;
+  color: #E91E63;
+  line-height: 1;
+  padding: 0 3px;
+  border-radius: 3px;
+  padding-bottom: 3px;
+  padding-top: 2px; }
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 88%; }
+  50% {
+    background-position: 100% 13%; }
+  100% {
+    background-position: 0% 88%; } }

@@ -1,24 +1,29 @@
-var gulp        = require('gulp');
-var browserSync = require('browser-sync').create();
-var sass        = require('gulp-sass');
-concat = require('gulp-concat');
-var inline = require('gulp-inline')
-  , uglify = require('gulp-uglify')
-  , minifyCss = require('gulp-minify-css')
-  , autoprefixer = require('gulp-autoprefixer');
-  var htmlmin = require('gulp-htmlmin');
-var imagemin = require('gulp-imagemin')
-var nunjucks = require('gulp-nunjucks-html')
+const gulp          = require('gulp');
+const browserSync   = require('browser-sync').create();
+const sass          = require('gulp-sass');
+const concat        = require('gulp-concat');
+const inline        = require('gulp-inline')
+const uglify        = require('gulp-uglify')
+const minifyCss     = require('gulp-minify-css')
+const autoprefixer  = require('gulp-autoprefixer');
+const htmlmin       = require('gulp-htmlmin');
+const imagemin      = require('gulp-imagemin')
+const nunjucks      = require('gulp-nunjucks-html')
+const fs = require('fs')
+
+
+// CONFIG
 const RELOAD_AFTER_MS = 10;
 
 // Static Server + watching scss/html files
-gulp.task('serve', ['sass', 'js', 'nunjucks', 'copyImages'], () => {
+gulp.task('serve', ['sass', 'js', 'nunjucks', 'copyImages', 'references'], () => {
   browserSync.init({
     server: "./src/public"
   });
   gulp.watch("src/scss/**/*.scss", ['sass']);
   gulp.watch("src/js/**/*.js", ['js']);
   gulp.watch("src/images/*", ['images']);
+  gulp.watch("src/references/*", ['references']);
   gulp.watch("src/templates/**/*.html", ['nunjucks']).on('change', ()=> {
     setTimeout(()=> {
       browserSync.reload();
@@ -47,13 +52,15 @@ gulp.task('nunjucks', function() {
     .pipe(gulp.dest('src/public/'));
 });
 
-
-gulp.task('build', ['sass', 'js', 'nunjucks', 'images'], () => {
+gulp.task('build', ['sass', 'js', 'nunjucks', 'images', 'copyReferences'], () => {
+  const items = fs.readdirSync('src/public/references');
+  const IGNORED_FILES = items.map(item => `references/${item}`)
   return gulp.src('src/public/*.html')
   .pipe(inline({
     base: 'src/public/',
     js: uglify,
     css: [minifyCss, autoprefixer({ browsers:['last 2 versions'] })],
+    ignore: IGNORED_FILES
   }))
   .pipe(htmlmin({collapseWhitespace: true}))
   .pipe(gulp.dest('dist/'));
@@ -69,5 +76,17 @@ gulp.task('images', () => {
       .pipe(imagemin())
       .pipe(gulp.dest('src/public/assets/images'))
 });
+
+gulp.task('references', () => {
+    return gulp.src('src/references/*')
+      .pipe(gulp.dest('src/public/references'))
+});
+
+gulp.task('copyReferences', () => {
+    return gulp.src('src/references/*')
+      .pipe(gulp.dest('dist/references'))
+});
+
+
 
 gulp.task('default', ['serve']);
