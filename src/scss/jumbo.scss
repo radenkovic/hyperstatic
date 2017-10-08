@@ -1,0 +1,47 @@
+.jumbo {
+  background: linear-gradient(45deg, #ab47bc, #7e57c2, #ec407a);
+  background-size: 600% 600%;
+  animation: gradientAnimation 17s ease infinite;
+  width: 100%;
+  text-align: center;
+  padding: 2rem 0;
+  display: block;
+}
+.jumbo h1 {
+  font-weight: 200;
+  font-size: 38px;
+  letter-spacing: 0.5px;
+  margin: .5rem 0;
+  color: rgba(255,255,255,0.9);
+}
+
+.jumbo a {
+  color: rgba(255,255,255, 0.7);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s;
+  &:after {
+    content: '|';
+    margin: 0 10px;
+    color: rgba(255,255,255,0.2);
+
+  }
+  &:last-child:after {
+    content: '';
+    margin: 0;
+  }
+  &:hover {
+    color: #FFF;
+  }
+}
+
+.logo {
+  width:50px;
+  opacity: 0.4;
+}
+
+@keyframes gradientAnimation { 
+    0%{background-position:0% 88%}
+    50%{background-position:100% 13%}
+    100%{background-position:0% 88%}
+}

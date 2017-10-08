@@ -4,9 +4,8 @@
   "description": "Generate Hyper Static HTML Websites on the fly",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "rimraf src/public && gulp",
-    "build": "rimraf dist && gulp build"
+    "build": "rimraf dist && rimraf src/public && gulp build"
   },
   "author": "Dan Radenkovic",
   "license": "MIT",

@@ -1,5 +1,11 @@
-$base: #673AB7;
+// Modules
+@import 'variables';
+@import 'jumbo';
+
+// Typography
 @import url('https://fonts.googleapis.com/css?family=Roboto');
+@import 'typography';
+
 
 body { 
   font-family: 'Roboto';
@@ -8,44 +14,7 @@ body {
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;
   font-size: 15px;
-}
-
-.jumbo {
-  background: linear-gradient(45deg, #ab47bc, #7e57c2, #ec407a);
-  background-size: 600% 600%;
-  animation: gradientAnimation 20s ease infinite;
-  width: 100%;
-  text-align: center;
-  padding: 2rem 0;
-  display: block;
-  margin-bottom: 2rem;
-}
-.jumbo h1 {
-  font-weight: 200;
-  font-size: 38px;
-  letter-spacing: 0.5px;
-  margin: .5rem 0;
-  color: rgba(255,255,255,0.9);
-}
-
-.jumbo a {
-  color: rgba(255,255,255, 0.7);
-  text-decoration: none;
-  font-size: 14px;
-  transition: color 0.3s;
-  &:after {
-    content: '|';
-    margin: 0 10px;
-    color: rgba(255,255,255,0.2);
-
-  }
-  &:last-child:after {
-    content: '';
-    margin: 0;
-  }
-  &:hover {
-    color: #FFF;
-  }
+  color: $text;
 }
 
 .container {
@@ -56,41 +25,26 @@ body {
   padding: 0 1.5rem;
 }
 
-.logo {
-  width:50px;
-  opacity: 0.4;
+$text-light: rgba(0,0,0,0.3);
+$text-border: rgba(0,0,0,0.1);
+
+.top-anchor {
+  font-size: 14px;
+  &:before {
+    content: '⇡';
+    font-size: 14px;
+    margin-right: 3px;
+    color: $text-light;
+  }
 }
 
-$midnight: #ECEFF1;
-
-
-pre {
-  background: $midnight;
-  border: 1px solid darken($midnight, 5%);
-  padding: 1rem;
-  color: #263238;
+section {
   box-sizing: border-box;
-  border-radius: 3px;
-}
+  border-bottom: 1px solid $text-border;
+  padding: 6rem 0;
 
-$pink: #FCE4EC;
-
-code {
-  display: inline-block;
-  font-family: 'Roboto';
-  background: lighten($pink, 2%);
-  border: 1px solid darken($pink, 1%);
-  color: #E91E63;
-  line-height: 1;
-  padding: 0 3px;
-  border-radius: 3px;
-  padding-bottom: 3px;
-  padding-top: 2px;
 }
 
 
-@keyframes gradientAnimation { 
-    0%{background-position:0% 88%}
-    50%{background-position:100% 13%}
-    100%{background-position:0% 88%}
-}
+
+
