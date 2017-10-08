@@ -55,7 +55,7 @@ gulp.task('nunjucks', function() {
 gulp.task('build', ['sass', 'js', 'nunjucks', 'images', 'copyReferences'], () => {
   const items = fs.readdirSync('src/public/references');
   const IGNORED_FILES = items.map(item => `references/${item}`)
-  return gulp.src('src/public/*.html')
+  return gulp.src('src/public/installation.html')
   .pipe(inline({
     base: 'src/public/',
     js: uglify,
@@ -63,7 +63,7 @@ gulp.task('build', ['sass', 'js', 'nunjucks', 'images', 'copyReferences'], () =>
     ignore: IGNORED_FILES
   }))
   .pipe(htmlmin({collapseWhitespace: true}))
-  .pipe(gulp.dest('dist/'));
+  .pipe(gulp.dest('dist'));
 })
 
 gulp.task('copyImages', () => {
