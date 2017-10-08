@@ -27,16 +27,22 @@ body {
   padding: 0 1.5rem;
 }
 
-$text-light: rgba(0,0,0,0.3);
-$text-border: rgba(0,0,0,0.1);
 
 .top-anchor {
   font-size: 14px;
+  border:0;
+  
   &:before {
-    content: '⇡';
+    content: '↥';
+    transition: 0.3s color;
     font-size: 14px;
     margin-right: 3px;
     color: $text-light;
+  }
+  &:hover {
+    &:before {
+      color: $primary;
+    }
   }
 }
 
@@ -54,6 +60,38 @@ img {
 .clearfix {
   display: block;
   clear: both;
+}
+
+footer {
+  .logo {
+    display: block;
+    float: left;
+    margin-right: 1rem;
+    width: 38px;
+  }
+  font-size: 13px;
+  padding: 1rem 0;
+  
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+.fadeInDown {
+  animation-name: fadeInDown;
+}
+
+.animated {
+  animation-duration: .8s;
+  animation-fill-mode: both;
 }
 
 

@@ -17,6 +17,7 @@ a {
   color: $text;
   text-decoration: none;
   transition: color 0.3s;
+  border-bottom: 1px solid $text-border;
   &:hover,&:active {
     color: $primary;
   }

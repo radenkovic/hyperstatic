@@ -1,20 +1,18 @@
-const gulp          = require('gulp');
-const browserSync   = require('browser-sync').create();
-const sass          = require('gulp-sass');
-const concat        = require('gulp-concat');
+const gulp          = require('gulp')
+const browserSync   = require('browser-sync').create()
+const sass          = require('gulp-sass')
+const concat        = require('gulp-concat')
 const inline        = require('gulp-inline')
 const uglify        = require('gulp-uglify')
 const minifyCss     = require('gulp-minify-css')
-const autoprefixer  = require('gulp-autoprefixer');
-const htmlmin       = require('gulp-htmlmin');
+const autoprefixer  = require('gulp-autoprefixer')
+const htmlmin       = require('gulp-htmlmin')
 const imagemin      = require('gulp-imagemin')
 const nunjucks      = require('gulp-nunjucks-html')
 const fs = require('fs')
 const path = require('path')
 const glob = require('glob')
 const eventStream =  require('event-stream')
-
-
 
 // CONFIG
 const RELOAD_AFTER_MS = 10;
@@ -74,11 +72,11 @@ gulp.task('references', () => {
 
 gulp.task('copyReferences', () => {
     return gulp.src('./src/references/**/*')
-      .pipe(gulp.dest('./dist/references'))
+      .pipe(gulp.dest('./dist/references/'))
 });
 
 gulp.task('docs', () => {
-  return gulp.src('./dist/*')
+  return gulp.src('./dist/**/*')
     .pipe(gulp.dest('./docs'))
 })
 
