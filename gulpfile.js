@@ -10,6 +10,9 @@ const htmlmin       = require('gulp-htmlmin');
 const imagemin      = require('gulp-imagemin')
 const nunjucks      = require('gulp-nunjucks-html')
 const fs = require('fs')
+const glob = require('glob')
+const eventStream =  require('event-stream')
+
 
 
 // CONFIG
@@ -52,20 +55,6 @@ gulp.task('nunjucks', function() {
     .pipe(gulp.dest('src/public/'));
 });
 
-gulp.task('build', ['sass', 'js', 'nunjucks', 'images', 'copyReferences'], () => {
-  const items = fs.readdirSync('src/public/references');
-  const IGNORED_FILES = items.map(item => `references/${item}`)
-  return gulp.src('src/public/installation.html')
-  .pipe(inline({
-    base: 'src/public/',
-    js: uglify,
-    css: [minifyCss, autoprefixer({ browsers:['last 2 versions'] })],
-    ignore: IGNORED_FILES
-  }))
-  .pipe(htmlmin({collapseWhitespace: true}))
-  .pipe(gulp.dest('dist'));
-})
-
 gulp.task('copyImages', () => {
     return gulp.src('src/images/*')
       .pipe(gulp.dest('src/public/assets/images'))
@@ -92,6 +81,28 @@ gulp.task('docs', () => {
     .pipe(gulp.dest('docs'))
 })
 
+// BUILD TASK
+gulp.task('build', ['sass', 'js', 'nunjucks', 'images', 'copyReferences'], (done) => {
+  // References
+  const items = fs.readdirSync('src/public/references');
+  const IGNORED_FILES = items.map(item => `references/${item}`)
+
+  glob('./src/public/' + '*.html', (err, files) => {
+     if (err) return done(err);
+     let tasks = files.map(file => {
+       return gulp.src(file)
+       .pipe(inline({
+         base: 'src/public',
+         js: uglify,
+         css: [minifyCss, autoprefixer({ browsers:['last 2 versions'] })],
+         ignore: IGNORED_FILES
+       }))
+       .pipe(htmlmin({collapseWhitespace: true}))
+       .pipe(gulp.dest('dist'));
+     });
+     eventStream.merge(tasks).on('end', done);
+ });
+})
 
 
 gulp.task('default', ['serve']);
