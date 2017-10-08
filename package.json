@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "rimraf src/public && gulp",
-    "build": "rimraf dist && rimraf src/public && gulp build"
+    "build": "rimraf dist && gulp build"
   },
   "author": "Dan Radenkovic",
   "license": "MIT",
