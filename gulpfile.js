@@ -87,6 +87,11 @@ gulp.task('copyReferences', () => {
       .pipe(gulp.dest('dist/references'))
 });
 
+gulp.task('docs', () => {
+  return gulp.src('dist/*')
+    .pipe(gulp.dest('docs'))
+})
+
 
 
 gulp.task('default', ['serve']);
