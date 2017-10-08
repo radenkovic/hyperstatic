@@ -83,7 +83,7 @@ gulp.task('docs', () => {
 })
 
 // BUILD TASK
-gulp.task('build', ['sass', 'js', 'nunjucks', 'images', 'copyReferences'], (done) => {
+gulp.task('build', ['sass', 'js', 'nunjucks', 'images', 'references', 'copyReferences'], (done) => {
   // References
   const items = fs.readdirSync(path.join(__dirname, '/src/public/references'));
   const IGNORED_FILES = items.map(item => `references/${item}`)
