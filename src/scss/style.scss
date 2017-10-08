@@ -1,6 +1,7 @@
 // Modules
 @import 'variables';
 @import 'jumbo';
+@import 'grid';
 
 // Typography
 @import url('https://fonts.googleapis.com/css?family=Roboto');
@@ -15,6 +16,7 @@ body {
   line-height: 1.6;
   font-size: 15px;
   color: $text;
+  overflow-y: scroll;
 }
 
 .container {
@@ -45,6 +47,13 @@ section {
 
 }
 
+img {
+  max-width: 100%;
+}
 
+.clearfix {
+  display: block;
+  clear: both;
+}
 
 
