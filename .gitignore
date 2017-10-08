@@ -1,5 +1,5 @@
 node_modules
 .DS_STORE
 dist
-src/public
 docs
+src/public/*
