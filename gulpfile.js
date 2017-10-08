@@ -10,6 +10,7 @@ const htmlmin       = require('gulp-htmlmin');
 const imagemin      = require('gulp-imagemin')
 const nunjucks      = require('gulp-nunjucks-html')
 const fs = require('fs')
+const path = require('path')
 const glob = require('glob')
 const eventStream =  require('event-stream')
 
@@ -84,7 +85,7 @@ gulp.task('docs', () => {
 // BUILD TASK
 gulp.task('build', ['sass', 'js', 'nunjucks', 'images', 'copyReferences'], (done) => {
   // References
-  const items = fs.readdirSync('./src/public/references');
+  const items = fs.readdirSync(path.join(__dirname, '/src/public/references'));
   const IGNORED_FILES = items.map(item => `references/${item}`)
 
   glob('./src/public/' + '*.html', (err, files) => {
