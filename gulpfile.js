@@ -56,23 +56,23 @@ gulp.task('nunjucks', function() {
 });
 
 gulp.task('copyImages', () => {
-    return gulp.src('src/images/*')
+    return gulp.src('src/images/**/*')
       .pipe(gulp.dest('src/public/assets/images'))
 });
 
 gulp.task('images', () => {
-    return gulp.src('src/images/*')
+    return gulp.src('src/images/**/*')
       .pipe(imagemin())
       .pipe(gulp.dest('src/public/assets/images'))
 });
 
 gulp.task('references', () => {
-    return gulp.src('src/references/*')
+    return gulp.src('src/references/**/*')
       .pipe(gulp.dest('src/public/references'))
 });
 
 gulp.task('copyReferences', () => {
-    return gulp.src('src/references/*')
+    return gulp.src('src/references/**/*')
       .pipe(gulp.dest('dist/references'))
 });
 
