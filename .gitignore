@@ -1,4 +1,5 @@
 node_modules
 .DS_STORE
 dist
-src/public/*
+public/*
+_build

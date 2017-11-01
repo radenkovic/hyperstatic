@@ -2,106 +2,99 @@ const gulp          = require('gulp')
 const browserSync   = require('browser-sync').create()
 const sass          = require('gulp-sass')
 const concat        = require('gulp-concat')
-const inline        = require('gulp-inline')
-const uglify        = require('gulp-uglify')
-const minifyCss     = require('gulp-minify-css')
-const autoprefixer  = require('gulp-autoprefixer')
-const htmlmin       = require('gulp-htmlmin')
-const imagemin      = require('gulp-imagemin')
 const nunjucks      = require('gulp-nunjucks-html')
-const fs = require('fs')
-const path = require('path')
-const glob = require('glob')
-const eventStream =  require('event-stream')
+const fs            = require('fs')
+const path          = require('path')
+var gulpWebpack     = require('gulp-webpack');
+const webpack       = require('webpack')
+const yaml          = require('js-yaml')
+const runSequence = require('gulp-sequence')
+const rimraf       = require('rimraf')
 
-// CONFIG
-const RELOAD_AFTER_MS = 10;
+// Get document, or throw exception on error
+let CONFIG_OBJECT = {};
+
+gulp.task('clean-build', (cb) => {
+  rimraf('./_build', cb)
+})
+
+try {
+  CONFIG_OBJECT = yaml.safeLoad(fs.readFileSync(process.cwd() +'/hyperstatic.yml', 'utf8'));
+} catch (e) {
+  console.log('Yaml file not found, or malformed. Aborting.')
+  console.log(e);
+  process.exit();
+}
+
+
+function withConfig(param) {
+  return `${process.cwd()}/${CONFIG_OBJECT[param]}`
+}
+
+let webpackConfig = module.exports = {
+    entry: `/${withConfig('js_folder')}/${CONFIG_OBJECT.webpack_entry_file}`,
+    output: {
+        path: process.cwd() + '/_build',
+        filename: CONFIG_OBJECT.js_filename
+    },
+    module: {
+        loaders: [
+            { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
+            { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ }
+        ]
+    },
+}
+
+const JS_TASK = CONFIG_OBJECT.webpack ? 'webpack' : 'js'
+
 
 // Static Server + watching scss/html files
-gulp.task('serve', ['sass', 'js', 'nunjucks', 'copyImages', 'references'], () => {
+gulp.task('serve', ['sass', JS_TASK, 'nunjucks'], () => {
   browserSync.init({
-    server: "./src/public"
+    server: ["./_build", CONFIG_OBJECT.public_folder]
   });
-  gulp.watch("src/scss/**/*.scss", ['sass']);
-  gulp.watch("src/js/**/*.js", ['js']);
-  gulp.watch("src/images/*", ['images']);
-  gulp.watch("src/references/*", ['references']);
-  gulp.watch("src/templates/**/*.html", ['nunjucks']).on('change', ()=> {
+  gulp.watch(`${withConfig('sass_folder')}/**/*.scss`, ['sass']);
+  gulp.watch(`${withConfig('js_folder')}/**/*.js`, [JS_TASK]);
+  gulp.watch(`${withConfig('nunjucks_folder')}/**/*.js`, ['nunjucks']).on('change', ()=> {
     setTimeout(()=> {
       browserSync.reload();
-    }, RELOAD_AFTER_MS)
+    }, CONFIG_OBJECT.reload_delay)
   });
 });
 
 gulp.task('sass', () => {
-  return gulp.src("./src/scss/**/*.scss")
+  return gulp.src(`${withConfig('sass_folder')}/**/*.scss`)
     .pipe(sass().on('error', sass.logError))
-    .pipe(concat('style.css'))
-    .pipe(gulp.dest("./src/public/assets"))
+    .pipe(gulp.dest("./_build"))
     .pipe(browserSync.stream());
-});
+})
+
+gulp.task('webpack', () => {
+  return gulp.src(`${withConfig('js_folder')}/${CONFIG_OBJECT.webpack_entry_file}`)
+    .pipe(gulpWebpack(webpackConfig, webpack))
+    .pipe(gulp.dest("./_build"))
+    .pipe(browserSync.stream());
+})
 
 gulp.task('js', () => {
-  return gulp.src("./src/js/**/*.js")
-    .pipe(concat('bundle.js'))
-    .pipe(gulp.dest("./src/public/assets"))
+  return gulp.src(`${withConfig('js_folder')}/**/*.js`)
+    .pipe(concat(CONFIG_OBJECT.js_filename))  
+    .pipe(gulp.dest("./_build"))
     .pipe(browserSync.stream());
 })
 
 gulp.task('nunjucks', function() {
-  return gulp.src('./src/templates/*.html')
-    .pipe(nunjucks({searchPaths: ['src/templates']}))
-    .pipe(gulp.dest('./src/public/'));
+  return gulp.src([`${withConfig('nunjucks_folder')}/**/*.html`, '!**/_*/**'])
+    .pipe(nunjucks({searchPaths: [ withConfig('nunjucks_folder') ], locals: CONFIG_OBJECT})).on('error', function(err) {
+      console.log('Nunjucks error', err)
+    })
+    .pipe(gulp.dest('./_build'));
 });
 
-gulp.task('copyImages', () => {
-    return gulp.src('./src/images/**/*')
-      .pipe(gulp.dest('./src/public/assets/images'))
-});
-
-gulp.task('images', () => {
-    return gulp.src('./src/images/**/*')
-      .pipe(imagemin())
-      .pipe(gulp.dest('./src/public/assets/images'))
-});
-
-gulp.task('references', () => {
-    return gulp.src('./src/references/**/*')
-      .pipe(gulp.dest('./src/public/references'))
-});
-
-gulp.task('copyReferences', () => {
-    return gulp.src('./src/references/**/*')
-      .pipe(gulp.dest('./dist/references/'))
-});
-
-gulp.task('docs', () => {
-  return gulp.src('./dist/**/*')
-    .pipe(gulp.dest('./docs'))
+gulp.task('clean-build', (cb) => {
+  rimraf('./_build', cb)
 })
 
-// BUILD TASK
-gulp.task('build', ['sass', 'js', 'nunjucks', 'images', 'references', 'copyReferences'], (done) => {
-  // References
-  const items = fs.readdirSync(path.join(__dirname, '/src/public/references'));
-  const IGNORED_FILES = items.map(item => `references/${item}`)
+gulp.task('default', runSequence('clean-build', 'serve'));
+gulp.task('prepare', runSequence('clean-build', 'sass', JS_TASK, 'nunjucks'));
 
-  glob('./src/public/' + '*.html', (err, files) => {
-     if (err) return done(err);
-     let tasks = files.map(file => {
-       return gulp.src(file)
-       .pipe(inline({
-         base: 'src/public',
-         js: uglify,
-         css: [minifyCss, autoprefixer({ browsers:['last 2 versions'] })],
-         ignore: IGNORED_FILES
-       }))
-       .pipe(htmlmin({collapseWhitespace: true}))
-       .pipe(gulp.dest('./dist'));
-     });
-     eventStream.merge(tasks).on('end', done);
- });
-})
-
-
-gulp.task('default', ['serve']);

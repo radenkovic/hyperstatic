@@ -1,0 +1,26 @@
+# -- HYPERSTATIC CONFIG FILE -- 
+
+# Project Options & Paths
+base_href: '/'
+description: 'some meta description'
+keywords: 'some meta keywords'
+site_domain: 'domain.com'
+google_analytics_code: 'GA-XXXX-XXXX'
+facebook_ads_pixel: '123-345-123'
+
+# Development Options
+public_folder: 'src/public'
+sass_folder: 'src/scss'
+nunjucks_folder: 'src/views'
+js_folder: 'src/js'
+js_filename: 'bundle.js'
+webpack: true
+webpack_entry_file: 'entry.js' # required only if using webpack
+reload_delay: 10 # in ms (if reload happens before partials are rendered)
+
+# Build Options
+minify_html: true
+autoprefixer: 'last 2 versions'
+do_not_inline: 
+  - 'style.css'
+  - 'mobile.jpg'

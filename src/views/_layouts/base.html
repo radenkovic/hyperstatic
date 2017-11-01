@@ -5,36 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Hyperstatic</title>
-  <link rel="stylesheet" href="assets/style.css">
-
-  <link rel="icon" type="image/png" sizes="16x16" href="references/favicon/favicon-16x16.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="references/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="96x96" href="references/favicon/favicon-96x96.png">
-
+  <link rel="stylesheet" href="/style.css">
+  <base href="{{base_href}}">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png">
 </head>
 <body>
   <header class="jumbo">
     <div class="container">
-      <img src="assets/images/diamond.svg" alt="Hyperstatic" class="animated fadeInDown logo">
+      <img src="/diamond.svg" alt="Hyperstatic" class="animated fadeInDown logo">
       <h1>Hyperstatic</h1>
-      <a href="./">Home</a>
-      <a href="./installation.html">Installation</a>
+      <a href="/">Home</a>
+      <a href="/installation.html">Installation</a>
       <a href="https://github.com/radenkovic/hyperstatic">Github</a>
     </div>
   </header>
   {% block content %}
   {% endblock %}
-  
   <footer>
     <div class="container">
       <div class="row">
         &copy; 2017. Dan Radenkovic<br>
         <a href="http://github.com/radenkovic">radenkovic.github.com</a>
-      </div>
-      <img src="assets/images/diamond.svg" class="logo">
-      
+      </div>      
     </div>
   </footer>
-  <script src="assets/bundle.js"></script>
+  <script src="/bundle.js"></script>
 </body>
 </html>
